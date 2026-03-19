@@ -23,7 +23,7 @@ Automated builder for a Windows 11 25H2 virtual machine pre-configured for malwa
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/vmbuilder.git
+   git clone https://github.com/wellingtonlee/vmbuilder.git
    cd vmbuilder
    ```
 
