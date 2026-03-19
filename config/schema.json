@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VMBuilder Configuration",
+  "description": "Schema for the VMBuilder config.yaml file",
+  "type": "object",
+  "required": ["iso"],
+  "properties": {
+    "vm": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "MalwareAnalysis-Win11-25H2",
+          "description": "Name of the virtual machine"
+        },
+        "cpus": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 4,
+          "description": "Number of CPU cores"
+        },
+        "memory_mb": {
+          "type": "integer",
+          "minimum": 2048,
+          "maximum": 65536,
+          "default": 8192,
+          "description": "Memory in MB"
+        },
+        "disk_size_mb": {
+          "type": "integer",
+          "minimum": 40960,
+          "maximum": 1048576,
+          "default": 102400,
+          "description": "Disk size in MB"
+        },
+        "username": {
+          "type": "string",
+          "default": "malware",
+          "description": "Local admin username"
+        },
+        "password": {
+          "type": "string",
+          "default": "malware",
+          "description": "Local admin password"
+        }
+      }
+    },
+    "iso": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Path to the Windows 11 25H2 ISO file"
+        },
+        "checksum": {
+          "type": "string",
+          "default": "none",
+          "description": "SHA256 checksum (sha256:abc...) or 'none'"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "directory": {
+          "type": "string",
+          "default": "./output",
+          "description": "Output directory for the built VM"
+        },
+        "snapshot_name": {
+          "type": "string",
+          "default": "Clean",
+          "description": "Name for the post-build snapshot"
+        }
+      }
+    },
+    "tool_overrides": {
+      "type": "object",
+      "description": "Override individual tool settings from tools.yaml. Keys are tool names.",
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  }
+}

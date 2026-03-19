@@ -1,0 +1,59 @@
+# Build output
+output/
+*.vmx
+*.vmdk
+*.vmsd
+*.vmxf
+*.nvram
+*.vmem
+*.log
+
+# Packer
+packer_cache/
+*.auto.pkrvars.hcl
+crash.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+.claude/
+
+# User config (may contain passwords, local paths)
+# Only config.example.yaml should be committed
+config/config.yaml
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+
+# User ISO files
+*.iso
+
+# Provision reports (generated inside VM)
+install-report.json
+build-report.json

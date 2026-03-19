@@ -1,0 +1,37 @@
+# VMBuilder Configuration
+# Copy this file to config.yaml and update the values for your environment.
+
+# Virtual machine settings
+vm:
+  name: "MalwareAnalysis-Win11-25H2"
+  cpus: 4
+  memory_mb: 8192
+  disk_size_mb: 102400
+  username: "malware"
+  password: "malware"
+
+# Windows 11 25H2 ISO settings
+iso:
+  # Path to the Windows 11 25H2 ISO file
+  # Run 'dism /Get-ImageInfo /ImageFile:D:\sources\install.wim' to verify image index
+  path: "/path/to/Win11_25H2_English_x64.iso"
+  # SHA256 checksum (format: sha256:abc123...). Use "none" to skip verification.
+  checksum: "none"
+
+# Build output settings
+output:
+  directory: "./output"
+  # Name for the clean snapshot taken after build completes
+  snapshot_name: "Clean"
+
+# Override individual tool settings from tools.yaml
+# Keys must match the 'name' field in tools.yaml
+# Any field can be overridden (enabled, url, install_dir, etc.)
+tool_overrides:
+  # Example: disable IDA Free
+  # ida-free:
+  #   enabled: false
+  #
+  # Example: update a download URL
+  # ghidra:
+  #   url: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.4_build/ghidra_11.4_PUBLIC.zip"

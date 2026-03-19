@@ -1,0 +1,491 @@
+# =============================================================================
+# Malware Analysis VM - Tool Definitions
+# =============================================================================
+#
+# This file defines all tools to be installed in the malware analysis VM.
+#
+# Each tool entry supports the following fields:
+#
+#   name          (required) Lowercase slug identifier for the tool.
+#   display_name  (required) Human-readable name shown in logs and shortcuts.
+#   method        (required) Install method. One of:
+#                   - choco            Install via Chocolatey package manager.
+#                   - direct-download  Download from a URL and extract/install.
+#                   - powershell       Run an arbitrary PowerShell command.
+#                   - shortcut-only    No install; just create a shortcut to an
+#                                      exe that another tool already installed.
+#                   - winget           Install via Windows Package Manager (winget).
+#   enabled       (required) Set to false to skip this tool during provisioning.
+#   category      (optional) Grouping for desktop shortcut folders. One of:
+#                   Debuggers, Disassemblers, "PE Analysis", Network,
+#                   "System Monitoring", Utilities, or null.
+#   exe_path      (optional) Full path to the main executable. Used to create
+#                   desktop/start-menu shortcuts.
+#   add_to_path   (optional) Directory to append to the system PATH.
+#   post_install  (optional) PowerShell script block to run after installation.
+#
+# Method-specific fields:
+#
+#   choco:
+#     choco_package  (required) Chocolatey package name.
+#     choco_params   (optional) Extra parameters passed to choco install.
+#
+#   direct-download:
+#     url            (required) Download URL for the artifact.
+#     download_type  (required) One of: zip, exe, msi, 7z.
+#     install_dir    (required) Local directory to extract/install into.
+#     silent_args    (optional) Arguments for silent install (exe/msi only).
+#
+#   winget:
+#     winget_id      (required) The winget package identifier.
+#
+#   powershell:
+#     command         (required) PowerShell command or script block to execute.
+#
+#   shortcut-only:
+#     depends_on     (required) The name (slug) of the tool that provides the exe.
+#     exe_path       (required) Full path to the executable to create a shortcut for.
+#
+# To add a new tool, copy an existing entry with the same method and update
+# the fields. Place it in the appropriate position (tools are installed in
+# the order listed here).
+# =============================================================================
+
+tools:
+
+  # ---------------------------------------------------------------------------
+  # Utilities
+  # ---------------------------------------------------------------------------
+
+  - name: 7zip
+    display_name: "7-Zip"
+    method: choco
+    choco_package: 7zip
+    category: Utilities
+    exe_path: "C:\\Program Files\\7-Zip\\7z.exe"
+    enabled: true
+    post_install: null
+
+  - name: sublime-text-4
+    display_name: "Sublime Text 4"
+    method: choco
+    choco_package: sublimetext4
+    category: Utilities
+    exe_path: "C:\\Program Files\\Sublime Text\\sublime_text.exe"
+    enabled: true
+    post_install: null
+
+  - name: graphviz
+    display_name: "Graphviz"
+    method: choco
+    choco_package: graphviz
+    category: Utilities
+    exe_path: "C:\\Program Files\\Graphviz\\bin\\dot.exe"
+    enabled: true
+    post_install: null
+
+  - name: python3
+    display_name: "Python"
+    method: choco
+    choco_package: python3
+    category: Utilities
+    exe_path: "C:\\Python3\\python.exe"
+    enabled: true
+    post_install: null
+
+  - name: temurin21jdk
+    display_name: "JDK Temurin"
+    method: choco
+    choco_package: temurin21jdk
+    category: Utilities
+    enabled: true
+    post_install: null
+
+  - name: yara
+    display_name: "YARA"
+    method: direct-download
+    url: "https://github.com/VirusTotal/yara/releases/download/v4.5.2/yara-v4.5.2-2326-win64.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\YARA"
+    category: Utilities
+    exe_path: "C:\\Tools\\YARA\\yara64.exe"
+    add_to_path: "C:\\Tools\\YARA"
+    enabled: true
+    post_install: null
+
+  - name: cyberchef
+    display_name: "CyberChef"
+    method: direct-download
+    url: "https://github.com/gchq/CyberChef/releases/download/v10.19.4/CyberChef_v10.19.4.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\CyberChef"
+    category: Utilities
+    exe_path: "C:\\Tools\\CyberChef\\CyberChef.html"
+    enabled: true
+    post_install: null
+
+  # ---------------------------------------------------------------------------
+  # Disassemblers
+  # ---------------------------------------------------------------------------
+
+  - name: ida-free
+    display_name: "IDA Free"
+    method: direct-download
+    # NOTE: You must update this URL to a valid IDA Free installer download link.
+    # Visit https://hex-rays.com/ida-free/ to obtain the current download URL.
+    url: "https://hex-rays.com/ida-free/PLACEHOLDER_UPDATE_ME.exe"
+    download_type: exe
+    install_dir: "C:\\Tools\\IDA Free"
+    silent_args: "/S"
+    category: Disassemblers
+    exe_path: "C:\\Tools\\IDA Free\\ida64.exe"
+    enabled: true
+    post_install: null
+
+  - name: ghidra
+    display_name: "Ghidra"
+    method: direct-download
+    url: "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3_build/ghidra_11.3_PUBLIC_20250108.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Ghidra"
+    category: Disassemblers
+    exe_path: "C:\\Tools\\Ghidra\\ghidraRun.bat"
+    # Ghidra requires a JDK. Ensure temurin21jdk is installed before this tool.
+    enabled: true
+    post_install: null
+
+  # ---------------------------------------------------------------------------
+  # Debuggers
+  # ---------------------------------------------------------------------------
+
+  - name: x64dbg
+    display_name: "x64dbg"
+    method: choco
+    choco_package: x64dbg.portable
+    category: Debuggers
+    exe_path: "C:\\ProgramData\\chocolatey\\lib\\x64dbg.portable\\tools\\x64dbg\\release\\x64\\x64dbg.exe"
+    enabled: true
+    post_install: null
+
+  - name: dnspy
+    display_name: "dnSpyEx"
+    method: direct-download
+    url: "https://github.com/dnSpyEx/dnSpy/releases/download/v6.5.1/dnSpy-net-win64.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\dnSpy"
+    category: Debuggers
+    exe_path: "C:\\Tools\\dnSpy\\dnSpy.exe"
+    enabled: true
+    post_install: null
+
+  - name: windbg
+    display_name: "WinDbg"
+    method: winget
+    winget_id: "Microsoft.WinDbg"
+    category: Debuggers
+    enabled: true
+    post_install: null
+
+  - name: ret-sync
+    display_name: "ret-sync"
+    method: direct-download
+    # NOTE: Update this URL to the latest ret-sync release zip.
+    url: "https://github.com/bootleg/ret-sync/releases/PLACEHOLDER_UPDATE_ME.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\ret-sync"
+    category: Debuggers
+    enabled: true
+    post_install: |
+      # Copy the x64dbg sync plugin DLL to the x64dbg plugins directory
+      $x64dbgPluginDir = "C:\ProgramData\chocolatey\lib\x64dbg.portable\tools\x64dbg\release\x64\plugins"
+      if (Test-Path $x64dbgPluginDir) {
+          $syncDll = Get-ChildItem -Path "C:\Tools\ret-sync" -Recurse -Filter "x64dbg_sync.dp64" | Select-Object -First 1
+          if ($syncDll) {
+              Copy-Item -Path $syncDll.FullName -Destination $x64dbgPluginDir -Force
+              Write-Host "[ret-sync] Copied x64dbg sync plugin to $x64dbgPluginDir"
+          } else {
+              Write-Warning "[ret-sync] Could not find x64dbg_sync.dp64 in C:\Tools\ret-sync"
+          }
+      } else {
+          Write-Warning "[ret-sync] x64dbg plugins directory not found at $x64dbgPluginDir"
+      }
+
+      # WinDbg extension: the ret-sync WinDbg extension (sync.dll) should be loaded
+      # manually or placed in the WinDbg extensions directory. Typical location:
+      #   C:\Tools\ret-sync\ext_windbg\sync.dll
+      # Load in WinDbg with: .load C:\Tools\ret-sync\ext_windbg\sync.dll
+      $windbgExt = Get-ChildItem -Path "C:\Tools\ret-sync" -Recurse -Filter "sync.dll" | Select-Object -First 1
+      if ($windbgExt) {
+          Write-Host "[ret-sync] WinDbg extension found at: $($windbgExt.FullName)"
+          Write-Host "[ret-sync] Load in WinDbg with: .load $($windbgExt.FullName)"
+      }
+
+  # ---------------------------------------------------------------------------
+  # PE Analysis
+  # ---------------------------------------------------------------------------
+
+  - name: cff-explorer
+    display_name: "Explorer Suite (CFF Explorer)"
+    method: direct-download
+    url: "https://ntcore.com/files/ExplorerSuite.exe"
+    download_type: exe
+    install_dir: "C:\\Tools\\ExplorerSuite"
+    silent_args: "/VERYSILENT"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\ExplorerSuite\\CFF Explorer.exe"
+    enabled: true
+    post_install: null
+
+  - name: detect-it-easy
+    display_name: "Detect-It-Easy"
+    method: direct-download
+    url: "https://github.com/horsicq/DIE-engine/releases/download/3.10/die_win64_portable_3.10_x64.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\DIE"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\DIE\\die.exe"
+    enabled: true
+    post_install: null
+
+  - name: imhex
+    display_name: "imHex"
+    method: direct-download
+    url: "https://github.com/WerWolv/ImHex/releases/download/v1.37.4/imhex-1.37.4-Windows-x86_64.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\ImHex"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\ImHex\\imhex.exe"
+    enabled: true
+    post_install: null
+
+  - name: capa
+    display_name: "Capa"
+    method: direct-download
+    url: "https://github.com/mandiant/capa/releases/download/v9.0.0/capa-v9.0.0-windows.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Capa"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\Capa\\capa.exe"
+    add_to_path: "C:\\Tools\\Capa"
+    enabled: true
+    post_install: null
+
+  - name: capa-rules
+    display_name: "Capa rules"
+    method: direct-download
+    url: "https://github.com/mandiant/capa-rules/archive/refs/tags/v9.0.0.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Capa\\rules"
+    category: "PE Analysis"
+    enabled: true
+    post_install: null
+
+  - name: capa-explorer-web
+    display_name: "Capa explorer web"
+    method: direct-download
+    # NOTE: Update this URL to the capa explorer web artifact from capa releases.
+    url: "https://github.com/mandiant/capa/releases/PLACEHOLDER_UPDATE_ME_explorer_web.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Capa\\explorer-web"
+    category: "PE Analysis"
+    enabled: true
+    post_install: null
+
+  - name: floss
+    display_name: "FLOSS"
+    method: direct-download
+    url: "https://github.com/mandiant/flare-floss/releases/download/v3.1.1/floss-v3.1.1-windows.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\FLOSS"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\FLOSS\\floss.exe"
+    add_to_path: "C:\\Tools\\FLOSS"
+    enabled: true
+    post_install: null
+
+  - name: pe-bear
+    display_name: "PE-Bear"
+    method: direct-download
+    url: "https://github.com/hasherezade/pe-bear/releases/download/v0.7.0.2/PE-bear_0.7.0.2_x64_win_vs19.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\PE-Bear"
+    category: "PE Analysis"
+    exe_path: "C:\\Tools\\PE-Bear\\PE-bear.exe"
+    enabled: true
+    post_install: null
+
+  # ---------------------------------------------------------------------------
+  # Network
+  # ---------------------------------------------------------------------------
+
+  - name: wireshark
+    display_name: "Wireshark"
+    method: choco
+    choco_package: wireshark
+    category: Network
+    exe_path: "C:\\Program Files\\Wireshark\\Wireshark.exe"
+    enabled: true
+    post_install: null
+
+  - name: windump
+    display_name: "WinDump"
+    method: direct-download
+    # NOTE: Update this URL to the latest WinDump binary.
+    # WinDump depends on Npcap which is installed by Wireshark.
+    url: "https://www.winpcap.org/windump/install/PLACEHOLDER_UPDATE_ME.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\WinDump"
+    category: Network
+    exe_path: "C:\\Tools\\WinDump\\WinDump.exe"
+    enabled: true
+    post_install: null
+
+  - name: fiddler-classic
+    display_name: "Fiddler Classic"
+    method: direct-download
+    url: "https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe"
+    download_type: exe
+    install_dir: "C:\\Tools\\Fiddler"
+    silent_args: "/S"
+    category: Network
+    exe_path: "C:\\Users\\Default\\AppData\\Local\\Programs\\Fiddler\\Fiddler.exe"
+    enabled: true
+    post_install: null
+
+  - name: fakenet-ng
+    display_name: "FakeNet-NG"
+    method: direct-download
+    url: "https://github.com/mandiant/flare-fakenet-ng/releases/download/v3.0/fakenet3.0.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\FakeNet-NG"
+    category: Network
+    exe_path: "C:\\Tools\\FakeNet-NG\\fakenet.exe"
+    enabled: true
+    post_install: null
+
+  # ---------------------------------------------------------------------------
+  # System Monitoring
+  # ---------------------------------------------------------------------------
+
+  - name: sysinternals
+    display_name: "Sysinternals Suite"
+    method: choco
+    choco_package: sysinternals
+    category: "System Monitoring"
+    enabled: true
+    post_install: null
+
+  - name: regshot
+    display_name: "Regshot"
+    method: choco
+    choco_package: regshot
+    category: "System Monitoring"
+    exe_path: "C:\\ProgramData\\chocolatey\\lib\\regshot\\tools\\Regshot-x64-Unicode.exe"
+    enabled: true
+    post_install: null
+
+  - name: system-informer
+    display_name: "System Informer"
+    method: choco
+    choco_package: systeminformer
+    category: "System Monitoring"
+    enabled: true
+    post_install: null
+
+  - name: procdot
+    display_name: "ProcDOT"
+    method: direct-download
+    # NOTE: Verify this URL is current. Visit https://www.procdot.com for latest.
+    url: "https://www.procdot.com/download/procdot/binaries/procdot_1_22_57_windows.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\ProcDOT"
+    category: "System Monitoring"
+    exe_path: "C:\\Tools\\ProcDOT\\procdot.exe"
+    enabled: true
+    post_install: null
+
+  - name: api-monitor
+    display_name: "API Monitor v2"
+    method: direct-download
+    url: "http://www.rohitab.com/download/api-monitor-v2r13-setup-x64.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\APIMonitor"
+    category: "System Monitoring"
+    exe_path: "C:\\Tools\\APIMonitor\\apimonitor-x64.exe"
+    enabled: true
+    post_install: null
+
+  - name: regfsnotify
+    display_name: "Regfsnotify"
+    method: direct-download
+    # NOTE: Update this URL to the Regfsnotify download location.
+    url: "https://PLACEHOLDER_UPDATE_ME/regfsnotify.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Regfsnotify"
+    category: "System Monitoring"
+    exe_path: "C:\\Tools\\Regfsnotify\\regfsnotify.exe"
+    enabled: true
+    post_install: null
+
+  - name: winobj
+    display_name: "WinObj"
+    method: shortcut-only
+    depends_on: sysinternals
+    category: "System Monitoring"
+    exe_path: "C:\\ProgramData\\chocolatey\\lib\\sysinternals\\tools\\Winobj.exe"
+    enabled: true
+    post_install: null
+
+  # ---------------------------------------------------------------------------
+  # Fonts
+  # ---------------------------------------------------------------------------
+
+  - name: meslo-nerd-font
+    display_name: "MesloLG Nerd Font"
+    method: direct-download
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.zip"
+    download_type: zip
+    install_dir: "C:\\Tools\\Fonts\\MesloLG"
+    category: null
+    enabled: true
+    post_install: |
+      # Install all MesloLG Nerd Font .ttf files into Windows
+      $fontSourceDir = "C:\Tools\Fonts\MesloLG"
+      $fontDestDir   = "C:\Windows\Fonts"
+      $regPath       = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
+
+      Get-ChildItem -Path $fontSourceDir -Filter "*.ttf" -Recurse | ForEach-Object {
+          $fontFile = $_
+          $destPath = Join-Path $fontDestDir $fontFile.Name
+
+          # Copy font file to Windows Fonts directory
+          Copy-Item -Path $fontFile.FullName -Destination $destPath -Force
+
+          # Register the font in the registry
+          # Use the font filename (without extension) as the display name
+          $fontName = [System.IO.Path]::GetFileNameWithoutExtension($fontFile.Name) + " (TrueType)"
+          New-ItemProperty -Path $regPath -Name $fontName -Value $fontFile.Name -PropertyType String -Force | Out-Null
+
+          Write-Host "[MesloLG] Installed font: $($fontFile.Name)"
+      }
+      Write-Host "[MesloLG] Font installation complete."
+
+  # ---------------------------------------------------------------------------
+  # System Configuration
+  # ---------------------------------------------------------------------------
+
+  - name: bcdedit-debug
+    display_name: "bcdedit /debug on"
+    method: powershell
+    command: "bcdedit /debug on"
+    category: null
+    enabled: true
+    post_install: null
+
+  - name: microsoft-edge
+    display_name: "Microsoft Edge"
+    method: powershell
+    command: "Write-Host 'Microsoft Edge is pre-installed on Windows 11'"
+    category: null
+    enabled: true
+    post_install: null
