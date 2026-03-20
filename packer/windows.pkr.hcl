@@ -8,6 +8,7 @@ source "vmware-iso" "win11-malware" {
   memory               = var.memory
   disk_size            = var.disk_size
   disk_type_id         = 0
+  disk_adapter_type    = "nvme"
   network_adapter_type = "e1000e"
   output_directory     = var.output_directory
 
@@ -24,7 +25,6 @@ source "vmware-iso" "win11-malware" {
   shutdown_command = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer build complete\""
 
   vmx_data = {
-    "scsi0.virtualDev"        = "lsisas1068"
     "firmware"                = "efi"
     "uefi.secureBoot.enabled" = "FALSE"
     "vhv.enable"              = "TRUE"
