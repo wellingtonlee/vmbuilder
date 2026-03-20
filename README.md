@@ -184,6 +184,9 @@ vmbuilder/
 
 ## Troubleshooting
 
+### UEFI boot hangs at "Press any key to boot from CD/DVD"
+The build includes a `boot_wait` (3s) and `boot_command` that sends a spacebar press to get past this prompt. If your system takes longer to reach this screen, increase `boot_wait` in `packer/windows.pkr.hcl` (e.g., `"5s"` or `"10s"`).
+
 ### ISO image index mismatch
 If Windows setup fails to find the correct edition, verify the image index in your ISO:
 ```powershell

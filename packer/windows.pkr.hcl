@@ -10,6 +10,8 @@ source "vmware-iso" "win11-malware" {
   disk_type_id         = 0
   disk_adapter_type    = "nvme"
   network_adapter_type = "e1000e"
+  boot_wait            = "3s"
+  boot_command         = ["<spacebar>"]
   output_directory     = var.output_directory
 
   communicator   = "winrm"
@@ -17,10 +19,11 @@ source "vmware-iso" "win11-malware" {
   winrm_password = var.winrm_password
   winrm_timeout  = "2h"
 
-  floppy_files = [
+  cd_files = [
     "${path.root}/../answer/autounattend.xml",
     "${path.root}/../answer/setup-winrm.ps1"
   ]
+  cd_label = "OEMDRV"
 
   shutdown_command = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer build complete\""
 

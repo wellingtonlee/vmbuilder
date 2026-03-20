@@ -81,16 +81,19 @@
           <ModifyPartitions>
             <ModifyPartition wcm:action="add">
               <Order>1</Order>
+              <DiskID>0</DiskID>
               <PartitionID>1</PartitionID>
               <Format>FAT32</Format>
               <Label>EFI</Label>
             </ModifyPartition>
             <ModifyPartition wcm:action="add">
               <Order>2</Order>
+              <DiskID>0</DiskID>
               <PartitionID>2</PartitionID>
             </ModifyPartition>
             <ModifyPartition wcm:action="add">
               <Order>3</Order>
+              <DiskID>0</DiskID>
               <PartitionID>3</PartitionID>
               <Format>NTFS</Format>
               <Label>Windows</Label>
@@ -151,6 +154,11 @@
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
           <Path>cmd /c netsh advfirewall set allprofiles state off</Path>
+        </RunSynchronousCommand>
+        <!-- Bypass Win11 25H2 mandatory network/Microsoft account OOBE -->
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Path>reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f</Path>
         </RunSynchronousCommand>
       </RunSynchronous>
     </component>
@@ -216,7 +224,7 @@
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
-          <CommandLine>powershell.exe -ExecutionPolicy Bypass -File a:\setup-winrm.ps1</CommandLine>
+          <CommandLine>powershell.exe -ExecutionPolicy Bypass -Command "foreach ($d in 'DEFGHIJ'.ToCharArray()) { $p = \"${d}:\setup-winrm.ps1\"; if (Test-Path $p) { &amp; $p; break } }"</CommandLine>
           <Description>Enable WinRM for Packer</Description>
           <RequiresUserInput>false</RequiresUserInput>
         </SynchronousCommand>
