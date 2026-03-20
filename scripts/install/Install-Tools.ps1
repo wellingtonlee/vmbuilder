@@ -1,5 +1,5 @@
 # Install-Tools.ps1
-# Main tool dispatcher — reads tools.yaml and installs each enabled tool
+# Main tool dispatcher - reads tools.yaml and installs each enabled tool
 # using the appropriate method handler.
 
 $ErrorActionPreference = "Stop"
@@ -11,7 +11,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 # Resolve paths
 $toolsYamlPath = $env:TOOLS_YAML
 if (-not $toolsYamlPath) { $toolsYamlPath = "C:\provision\tools.yaml" }
-$scriptsDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$scriptsDir = "C:\provision\scripts\install"
 
 # Import YAML module
 Import-Module powershell-yaml -ErrorAction Stop
@@ -68,7 +68,7 @@ foreach ($tool in $tools) {
             }
 
             "shortcut-only" {
-                Write-Host "  [shortcut] $($tool.display_name) — no install needed (bundled with $($tool.depends_on))" -ForegroundColor Green
+                Write-Host "  [shortcut] $($tool.display_name) - no install needed (bundled with $($tool.depends_on))" -ForegroundColor Green
                 $result = @{ Success = $true; Method = "shortcut-only" }
             }
 

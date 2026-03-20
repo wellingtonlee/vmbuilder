@@ -11,7 +11,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 $userSid = (Get-WmiObject Win32_UserAccount | Where-Object { $_.Name -eq $env:USERNAME }).SID
 $hkuPath = "Registry::HKU\$userSid"
 
-# ── Dark Mode ────────────────────────────────────────────────────────────
+# -- Dark Mode ------------------------------------------------------------
 
 Write-Host "[1/6] Enabling dark mode..." -ForegroundColor Yellow
 
@@ -32,7 +32,7 @@ Set-ItemProperty -Path $hkcuThemePath -Name "SystemUsesLightTheme" -Value 0 -Typ
 
 Write-Host "  Dark mode enabled." -ForegroundColor Green
 
-# ── Show File Extensions ─────────────────────────────────────────────────
+# -- Show File Extensions -------------------------------------------------
 
 Write-Host "[2/6] Showing file extensions..." -ForegroundColor Yellow
 
@@ -47,7 +47,7 @@ Set-ItemProperty -Path $hkcuExplorerPath -Name "HideFileExt" -Value 0 -Type DWor
 
 Write-Host "  File extensions visible." -ForegroundColor Green
 
-# ── Show Hidden Files ────────────────────────────────────────────────────
+# -- Show Hidden Files ----------------------------------------------------
 
 Write-Host "[3/6] Showing hidden files and protected OS files..." -ForegroundColor Yellow
 
@@ -61,7 +61,7 @@ if (Test-Path $explorerPath) {
 
 Write-Host "  Hidden files and protected OS files visible." -ForegroundColor Green
 
-# ── Disable News and Interests / Widgets ─────────────────────────────────
+# -- Disable News and Interests / Widgets ---------------------------------
 
 Write-Host "[4/6] Disabling taskbar widgets..." -ForegroundColor Yellow
 
@@ -82,7 +82,7 @@ Set-ItemProperty -Path $hkcuExplorerPath -Name "TaskbarMn" -Value 0 -Type DWord 
 
 Write-Host "  Taskbar widgets disabled." -ForegroundColor Green
 
-# ── Set Default Console Font ─────────────────────────────────────────────
+# -- Set Default Console Font ---------------------------------------------
 
 Write-Host "[5/6] Setting default console font to MesloLGS NF..." -ForegroundColor Yellow
 
@@ -106,7 +106,7 @@ if (Test-Path $wtSettingsDir) {
 
 Write-Host "  Console font configured." -ForegroundColor Green
 
-# ── Set Wallpaper ────────────────────────────────────────────────────────
+# -- Set Wallpaper --------------------------------------------------------
 
 Write-Host "[6/6] Configuring wallpaper..." -ForegroundColor Yellow
 

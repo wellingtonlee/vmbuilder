@@ -79,7 +79,7 @@ foreach ($tool in $tools) {
     # Verify the executable exists
     if (-not (Test-Path $tool.exe_path)) {
         Write-Host "  WARNING: Executable not found for $($tool.display_name): $($tool.exe_path)" -ForegroundColor DarkYellow
-        # Still create the shortcut — it may work after reboot or PATH refresh
+        # Still create the shortcut - it may work after reboot or PATH refresh
     }
 
     $categoryFolder = Join-Path $desktopPath $tool.category

@@ -10,7 +10,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host " Windows Hardening for Malware Analysis" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 
-# ── Disable Windows Defender ─────────────────────────────────────────────
+# -- Disable Windows Defender ---------------------------------------------
 
 Write-Host ""
 Write-Host "[1/7] Disabling Windows Defender..." -ForegroundColor Yellow
@@ -49,7 +49,7 @@ Set-ItemProperty -Path $tamperPath -Name "TamperProtection" -Value 0 -Type DWord
 
 Write-Host "  Defender disabled." -ForegroundColor Green
 
-# ── Disable Windows Update ───────────────────────────────────────────────
+# -- Disable Windows Update -----------------------------------------------
 
 Write-Host "[2/7] Disabling Windows Update..." -ForegroundColor Yellow
 
@@ -67,7 +67,7 @@ Set-ItemProperty -Path $wuPolicyPath -Name "AUOptions" -Value 1 -Type DWord -For
 
 Write-Host "  Windows Update disabled." -ForegroundColor Green
 
-# ── Disable Telemetry ────────────────────────────────────────────────────
+# -- Disable Telemetry ----------------------------------------------------
 
 Write-Host "[3/7] Disabling telemetry..." -ForegroundColor Yellow
 
@@ -83,7 +83,7 @@ Set-ItemProperty -Path $telemetryPath -Name "AllowTelemetry" -Value 0 -Type DWor
 
 Write-Host "  Telemetry disabled." -ForegroundColor Green
 
-# ── Disable Cortana ──────────────────────────────────────────────────────
+# -- Disable Cortana ------------------------------------------------------
 
 Write-Host "[4/7] Disabling Cortana..." -ForegroundColor Yellow
 
@@ -95,7 +95,7 @@ Set-ItemProperty -Path $cortanaPath -Name "AllowSearchToUseLocation" -Value 0 -T
 
 Write-Host "  Cortana disabled." -ForegroundColor Green
 
-# ── Disable UAC ──────────────────────────────────────────────────────────
+# -- Disable UAC ----------------------------------------------------------
 
 Write-Host "[5/7] Disabling UAC..." -ForegroundColor Yellow
 
@@ -106,7 +106,7 @@ Set-ItemProperty -Path $uacPath -Name "PromptOnSecureDesktop" -Value 0 -Type DWo
 
 Write-Host "  UAC disabled." -ForegroundColor Green
 
-# ── Disable SmartScreen ──────────────────────────────────────────────────
+# -- Disable SmartScreen --------------------------------------------------
 
 Write-Host "[6/7] Disabling SmartScreen..." -ForegroundColor Yellow
 
@@ -120,7 +120,7 @@ Set-ItemProperty -Path $smartScreenEdgePath -Name "EnabledV9" -Value 0 -Type DWo
 
 Write-Host "  SmartScreen disabled." -ForegroundColor Green
 
-# ── Disable Firewall ─────────────────────────────────────────────────────
+# -- Disable Firewall -----------------------------------------------------
 
 Write-Host "[7/7] Disabling Windows Firewall..." -ForegroundColor Yellow
 
@@ -128,7 +128,7 @@ Set-NetFirewallProfile -Profile Domain, Public, Private -Enabled False
 
 Write-Host "  Firewall disabled." -ForegroundColor Green
 
-# ── Summary ──────────────────────────────────────────────────────────────
+# -- Summary --------------------------------------------------------------
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green

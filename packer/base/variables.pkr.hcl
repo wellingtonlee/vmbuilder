@@ -48,12 +48,6 @@ variable "winrm_password" {
 
 variable "output_directory" {
   type        = string
-  default     = "output"
-  description = "Directory for the built VM files"
-}
-
-variable "tools_yaml_path" {
-  type        = string
-  default     = "config/tools.yaml"
-  description = "Path to the tools YAML configuration file"
+  default     = "output-base"
+  description = "Directory for the base VM files"
 }

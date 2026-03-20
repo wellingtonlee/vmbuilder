@@ -29,11 +29,16 @@ Install-Module -Name powershell-yaml -Force -Scope AllUsers
 
 Write-Host "powershell-yaml module installed successfully." -ForegroundColor Green
 
-# Install winget (needed for WinDbg)
+# Ensure winget is available (pre-installed on Windows 11, may need registration)
 Write-Host "Ensuring winget is available..." -ForegroundColor Cyan
-# winget is pre-installed on Windows 11 but may need App Installer update
-# We'll attempt to use it and handle failures in the tool installer
-Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe 2>$null
+try {
+    Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe -ErrorAction Stop
+    Write-Host "winget registered successfully." -ForegroundColor Green
+}
+catch {
+    Write-Host "winget registration skipped (not fatal): $_" -ForegroundColor Yellow
+    Write-Host "winget should already be available on Windows 11 25H2." -ForegroundColor Yellow
+}
 
 Write-Host "========================================" -ForegroundColor Green
 Write-Host " Bootstrap complete" -ForegroundColor Green

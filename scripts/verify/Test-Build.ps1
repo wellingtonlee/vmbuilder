@@ -5,6 +5,11 @@
 
 $ErrorActionPreference = "SilentlyContinue"
 
+if ($env:SKIP_VERIFY -eq "1") {
+    Write-Host "Post-build verification SKIPPED (--skip-verify flag)." -ForegroundColor Yellow
+    exit 0
+}
+
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host " Post-Build Verification" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
@@ -29,7 +34,7 @@ $results = @{
     warnings     = 0
 }
 
-# ── Tool Verification ────────────────────────────────────────────────────
+# -- Tool Verification ----------------------------------------------------
 
 Write-Host ""
 Write-Host "Verifying tool installations..." -ForegroundColor Cyan
@@ -45,7 +50,7 @@ foreach ($tool in $tools) {
     }
 
     if ($tool.method -eq "powershell") {
-        # For powershell commands, we can't really verify — mark as OK
+        # For powershell commands, we can't really verify - mark as OK
         $check.status = "PASS"
         $check.detail = "PowerShell command (assumed OK)"
         $results.passed++
@@ -94,12 +99,12 @@ foreach ($tool in $tools) {
         "WARN" { "Yellow" }
         default { "Gray" }
     }
-    Write-Host "  [$($check.status)] $($check.name) — $($check.detail)" -ForegroundColor $statusColor
+    Write-Host "  [$($check.status)] $($check.name) - $($check.detail)" -ForegroundColor $statusColor
 
     $results.tools += $check
 }
 
-# ── Hardening Verification ───────────────────────────────────────────────
+# -- Hardening Verification -----------------------------------------------
 
 Write-Host ""
 Write-Host "Verifying hardening..." -ForegroundColor Cyan
@@ -177,7 +182,7 @@ foreach ($hc in $hardeningChecks) {
     }
 
     $statusColor = switch ($check.status) { "PASS" { "Green" } "FAIL" { "Red" } default { "Gray" } }
-    Write-Host "  [$($check.status)] $($check.name) — $($check.detail)" -ForegroundColor $statusColor
+    Write-Host "  [$($check.status)] $($check.name) - $($check.detail)" -ForegroundColor $statusColor
 
     $results.hardening += $check
 }
@@ -201,17 +206,17 @@ foreach ($svcName in $servicesToCheck) {
     }
     else {
         $check.status = "PASS"
-        $check.detail = "Service not found (OK — may have been removed)"
+        $check.detail = "Service not found (OK - may have been removed)"
         $results.passed++
     }
 
     $statusColor = switch ($check.status) { "PASS" { "Green" } "WARN" { "Yellow" } default { "Gray" } }
-    Write-Host "  [$($check.status)] $($check.name) — $($check.detail)" -ForegroundColor $statusColor
+    Write-Host "  [$($check.status)] $($check.name) - $($check.detail)" -ForegroundColor $statusColor
 
     $results.hardening += $check
 }
 
-# ── Desktop Verification ─────────────────────────────────────────────────
+# -- Desktop Verification -------------------------------------------------
 
 Write-Host ""
 Write-Host "Verifying desktop layout..." -ForegroundColor Cyan
@@ -236,12 +241,12 @@ foreach ($folder in $expectedFolders) {
     }
 
     $statusColor = switch ($check.status) { "PASS" { "Green" } "FAIL" { "Red" } default { "Gray" } }
-    Write-Host "  [$($check.status)] $($check.name) — $($check.detail)" -ForegroundColor $statusColor
+    Write-Host "  [$($check.status)] $($check.name) - $($check.detail)" -ForegroundColor $statusColor
 
     $results.desktop += $check
 }
 
-# ── Kernel Debug Mode ────────────────────────────────────────────────────
+# -- Kernel Debug Mode ----------------------------------------------------
 
 Write-Host ""
 Write-Host "Verifying kernel debug mode..." -ForegroundColor Cyan
@@ -256,7 +261,7 @@ else {
     $results.warnings++
 }
 
-# ── Summary ──────────────────────────────────────────────────────────────
+# -- Summary --------------------------------------------------------------
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
@@ -275,7 +280,7 @@ Write-Host "Report saved to: $reportPath" -ForegroundColor Cyan
 # Exit with error if critical failures
 if ($results.failed -gt 0) {
     Write-Host ""
-    Write-Host "BUILD VERIFICATION FAILED — $($results.failed) check(s) failed." -ForegroundColor Red
+    Write-Host "BUILD VERIFICATION FAILED - $($results.failed) check(s) failed." -ForegroundColor Red
     exit 1
 }
 

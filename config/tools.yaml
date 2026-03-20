@@ -139,7 +139,7 @@ tools:
     silent_args: "/S"
     category: Disassemblers
     exe_path: "C:\\Tools\\IDA Free\\ida64.exe"
-    enabled: true
+    enabled: false
     post_install: null
 
   - name: ghidra
@@ -194,7 +194,7 @@ tools:
     download_type: zip
     install_dir: "C:\\Tools\\ret-sync"
     category: Debuggers
-    enabled: true
+    enabled: false
     post_install: |
       # Copy the x64dbg sync plugin DLL to the x64dbg plugins directory
       $x64dbgPluginDir = "C:\ProgramData\chocolatey\lib\x64dbg.portable\tools\x64dbg\release\x64\plugins"
@@ -284,7 +284,7 @@ tools:
     display_name: "Capa explorer web"
     method: direct-download
     # NOTE: Update this URL to the capa explorer web artifact from capa releases.
-    url: "https://github.com/mandiant/capa/releases/PLACEHOLDER_UPDATE_ME_explorer_web.zip"
+    url: "https://mandiant.github.io/capa/explorer/capa-explorer-web.zip"
     download_type: zip
     install_dir: "C:\\Tools\\Capa\\explorer-web"
     category: "PE Analysis"
@@ -337,7 +337,7 @@ tools:
     install_dir: "C:\\Tools\\WinDump"
     category: Network
     exe_path: "C:\\Tools\\WinDump\\WinDump.exe"
-    enabled: true
+    enabled: false
     post_install: null
 
   - name: fiddler-classic
@@ -424,7 +424,7 @@ tools:
     install_dir: "C:\\Tools\\Regfsnotify"
     category: "System Monitoring"
     exe_path: "C:\\Tools\\Regfsnotify\\regfsnotify.exe"
-    enabled: true
+    enabled: false
     post_install: null
 
   - name: winobj
