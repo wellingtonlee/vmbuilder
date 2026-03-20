@@ -77,7 +77,7 @@
       }
     },
     "tool_overrides": {
-      "type": "object",
+      "type": ["object", "null"],
       "description": "Override individual tool settings from tools.yaml. Keys are tool names.",
       "additionalProperties": {
         "type": "object"
