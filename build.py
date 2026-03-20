@@ -192,8 +192,11 @@ output_directory = "{hcl_path(output.get("directory", "output"))}"
 tools_yaml_path  = "{hcl_path(tools_yaml_path)}"
 '''
 
-    vars_file = ROOT_DIR / "output" / "build.auto.pkrvars.hcl"
-    os.makedirs(vars_file.parent, exist_ok=True)
+    # Write vars file to .build/ (not output/) to avoid conflicting with
+    # Packer's output_directory, which must not exist before the build.
+    build_dir = ROOT_DIR / ".build"
+    vars_file = build_dir / "build.auto.pkrvars.hcl"
+    os.makedirs(build_dir, exist_ok=True)
 
     with open(vars_file, "w") as f:
         f.write(vars_content)
@@ -326,8 +329,9 @@ def main():
         sys.exit(0)
 
     # Write merged tools.yaml with overrides applied
-    merged_tools_path = ROOT_DIR / "output" / "tools.merged.yaml"
-    os.makedirs(merged_tools_path.parent, exist_ok=True)
+    build_dir = ROOT_DIR / ".build"
+    os.makedirs(build_dir, exist_ok=True)
+    merged_tools_path = build_dir / "tools.merged.yaml"
     with open(merged_tools_path, "w") as f:
         yaml.dump(tools_config, f, default_flow_style=False, sort_keys=False)
 
